@@ -19,16 +19,7 @@ juv_density<-read.csv("data/juvenile_coral_density.csv", header=TRUE, stringsAsF
 #------------------------------------------------------------------------------------------------------------#
 
 #glmm with negative binomial distribution
-
-juv_dens_glmm <- glmmTMB(recruits_m2 ~ Depth + YearFirstAppeared + Depth:YearFirstAppeared + (1|Site), data=recruits_per_quad_year, family=nbinom2)
-
-car::Anova(juv_dens_glmm, type=2) ## model results with Wald chi squared tests
-summary(juv_dens_glmm)
-qqPlot(resid(juv_dens_glmm))
-check_overdispersion(juv_dens_glmm)
-plot(simulateResiduals(juv_dens_glmm, quantileFunction = qnorm))
-
-# now including quadrat nested within site
+# including quadrat nested within site
 juv_dens_glmm2 <- glmmTMB(recruits_m2 ~ Depth + YearFirstAppeared + Depth:YearFirstAppeared + (1|Site/Site_Depth_Pole_Quad), data=recruits_per_quad_year, family=nbinom2(link = "log"))
 
 car::Anova(juv_dens_glmm2, type=2) ## model results with Wald chi squared tests
