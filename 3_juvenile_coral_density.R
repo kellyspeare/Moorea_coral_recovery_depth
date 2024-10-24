@@ -1,5 +1,9 @@
 library(glmmTMB)
 library(DHARMa)
+library(car)
+library(emmeans)
+library(ggplot2)
+library(tidyverse)
 
 # 3_juvenile_coral_density
 # script analyzes and plots data on the density of juvenile corals
