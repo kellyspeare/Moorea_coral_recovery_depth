@@ -1,6 +1,9 @@
 library(emmeans)
 library(multcomp)
 library(tidyverse)
+library(car)
+library(ggplot2)
+library(DHARMa)
 
 # 7_substratum_coral_mortality
 # script analyzes data on substratum availability and juvenile coral mortality
