@@ -4,6 +4,7 @@ library(car)
 library(emmeans)
 library(ggplot2)
 library(tidyverse)
+library(glmmTMB)
 
 # 8_macroalgae_juvenile_coral_density
 # script analyzes data the abundance of macroalgae and relationship to juvenile coral density
@@ -36,17 +37,9 @@ macro_means<-ddply(macro, .(Site, Depth, Year), summarize,
                    mean=mean(Macroalgae), 
                    SE=sd(Macroalgae)/sqrt(length(Macroalgae)))
 
-macro.cover.mod<-lmer(Macroalgae ~ Depth + Year + Depth:Year+ (1|Site), data=macro)
-plot(macro.cover.mod)
-
-macro.cover.mod.1<-lmer(Macroalgae ~ Depth + Year + (1|Site), data=macro)
-anova(macro.cover.mod, macro.cover.mod.1) #significant interaction of depth and year
-
-macro_glmm<-glmmTMB(Macroalgae ~ Depth + Year + (1|Site), data=macro, family=gaussian(link = "identity"))
+macro_glmm<-glmmTMB(Macroalgae ~ Depth*Year + (1|Site), data=macro, family=gaussian(link = "identity"))
 car::Anova(macro_glmm, type=2) ## model results with Wald chi squared tests
 summary(macro_glmm)
-plot(simulateResiduals(macro_glmm, quantileFunction = qnorm))
-plot(allEffects(macro_glmm))
 
 predicted_macro_cover<-data.frame(emmeans(macro.cover.mod, ~ Depth*Year))
 
